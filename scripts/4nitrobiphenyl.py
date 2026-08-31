@@ -37,7 +37,7 @@ workdir
 # > initializing calculator
 calc = Calculator(basename="job", working_dir=workdir)
 
-# > adding geometry of water from smiles
+# > adding geometry of 4nitrobiphenyl from smiles
 calc.structure = Structure.from_xyz(XYZ_DIR / "4nitrobiphenyl.xyz", charge=0, multiplicity=1)
 
 # > setting method Hartree-Fock Hartree-Fock with basis set def2-TZVP

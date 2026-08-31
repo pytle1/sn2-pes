@@ -123,8 +123,6 @@ irc_calc = setup_irc_calc("irc", "nudged_elastic_band/ts.xyz", base_dir, ncores=
 irc_out = run_calc(irc_calc)
 check_and_parse_output(irc_out)
 
-k
-
 
 
 
