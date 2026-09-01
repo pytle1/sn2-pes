@@ -120,6 +120,13 @@ end
     print(f"\nXYZ: {optimized_xyz}")
     print(f"Output: {out}")
 
+    return {
+            "cn": cn_target,
+            "ccl": ccl_target,
+            "energy": float(energies[-1]),
+            "xyz": optimized_xyz,
+    }
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
