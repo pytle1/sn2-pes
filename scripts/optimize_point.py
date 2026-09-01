@@ -6,24 +6,19 @@ import subprocess
 
 PROJECT = Path(__file__).resolve().parents[1]
 
-SOURCE_XYZ = (
+source_xyz = (
         PROJECT
         / "calculations"
         / "relaxed_point_cn1.600_ccl2.800" 
         / "job.xyz"
 )
 
-WORKDIR = PROJECT / "calculations" / "relaxed_point_cn1.800_ccl2.600"
-
 # ORCA uses 0-based atom indices.
 IPSO_C = 9
 NITRO_N = 2
 CL = 24
 
-TARGET_CN = 1.80
-TARGET_CCL = 2.60
 NCORES = 4
-
 
 def read_xyz(path: Path):
     lines = path.read_text().splitlines()
@@ -39,25 +34,35 @@ def distance(a, b):
     return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
 
 
-def report_distances(xyz_path: Path):
+def report_distances(
+        xyz_path: Path,
+        cn_target: float,
+        ccl_target: float,
+):
     atoms = read_xyz(xyz_path)
     cn = distance(atoms[IPSO_C][1], atoms[NITRO_N][1])
     ccl = distance(atoms[IPSO_C][1], atoms[CL][1])
-    print(f"C-N  = {cn:.6f} Å  (target {TARGET_CN:.3f})")
-    print(f"C-Cl = {ccl:.6f} Å  (target {TARGET_CCL:.3f})")
+    print(f"C-N  = {cn:.6f} Å  (target {cn_target:.3f})")
+    print(f"C-Cl = {ccl:.6f} Å  (target {ccl_target:.3f})")
 
 
-def main():
+def optimize_point(source_xyz: Path, cn_target: float, ccl_target: float):
+    workdir = (
+            PROJECT
+            / "calculations"
+            / f"relaxed_point_cn{cn_target:.3f}_ccl{ccl_target:.3f}"
+    )
+
     orca = shutil.which("orca")
     if orca is None:
         raise RuntimeError("Could not find ORCA executable in PATH")
 
-    WORKDIR.mkdir(parents=True, exist_ok=True)
-    start_xyz = WORKDIR / "start.xyz"
-    shutil.copy2(SOURCE_XYZ, start_xyz)
+    workdir.mkdir(parents=True, exist_ok=True)
+    start_xyz = workdir / "start.xyz"
+    shutil.copy2(source_xyz, start_xyz)
 
-    inp = WORKDIR / "job.inp"
-    out = WORKDIR / "job.out"
+    inp = workdir / "job.inp"
+    out = workdir / "job.out"
 
     inp.write_text(
         f"""! r2SCAN-3c Opt TightSCF
@@ -68,8 +73,8 @@ end
 
 %geom
   Constraints
-    {{ B {IPSO_C} {NITRO_N} {TARGET_CN:.6f} C }}
-    {{ B {IPSO_C} {CL} {TARGET_CCL:.6f} C }}
+    {{ B {IPSO_C} {NITRO_N} {cn_target:.6f} C }}
+    {{ B {IPSO_C} {CL} {ccl_target:.6f} C }}
   end
 end
 
@@ -78,13 +83,13 @@ end
     )
 
     print("Starting geometry:")
-    report_distances(start_xyz)
-    print(f"\nRunning ORCA in {WORKDIR}")
+    report_distances(start_xyz, cn_target, ccl_target)
+    print(f"\nRunning ORCA in {workdir}")
 
     with out.open("w") as fh:
         result = subprocess.run(
             [orca, inp.name],
-            cwd=WORKDIR,
+            cwd=workdir,
             stdout=fh,
             stderr=subprocess.STDOUT,
         )
@@ -102,7 +107,7 @@ end
     if not energies:
         raise RuntimeError(f"Could not find final energy in {out}")
 
-    optimized_xyz = WORKDIR / "job.xyz"
+    optimized_xyz = workdir / "job.xyz"
     if not optimized_xyz.exists():
         raise RuntimeError(
             f"ORCA terminated normally, but {optimized_xyz} was not found"
@@ -110,11 +115,17 @@ end
 
     print(f"\nFinal energy: {float(energies[-1]):.12f} Eh")
     print("Optimized geometry:")
-    report_distances(optimized_xyz)
+    report_distances(optimized_xyz, cn_target, ccl_target)
     print(f"\nXYZ: {optimized_xyz}")
     print(f"Output: {out}")
 
 
 if __name__ == "__main__":
-    main()
-
+    optimize_point(
+            PROJECT
+            / "calculations"
+            / "relaxed_point_cn1.800_ccl2.600"
+            / "job.xyz",
+            2.00,
+            2.400,
+    )
