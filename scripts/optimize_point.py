@@ -3,6 +3,7 @@ import math
 import re
 import shutil
 import subprocess
+import argparse
 
 PROJECT = Path(__file__).resolve().parents[1]
 
@@ -120,12 +121,40 @@ end
     print(f"Output: {out}")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+            description="Run one constrained C-N / C-Cl optimization."
+    )
+
+    parser.add_argument(
+            "--xyz",
+            type=Path,
+            required=True,
+            help="Starting XYZ geometry",
+    )
+
+    parser.add_argument(
+            "--cn",
+            type=float,
+            required=True,
+            help="Target C-N distance in angstrom",
+    )
+
+    parser.add_argument(
+            "--ccl",
+            type=float,
+            required=True,
+            help="Target C-Cl distance in angstrom",
+    )
+
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_args()
+
     optimize_point(
-            PROJECT
-            / "calculations"
-            / "relaxed_point_cn1.800_ccl2.600"
-            / "job.xyz",
-            2.00,
-            2.400,
+            source_xyz=args.xyz,
+            cn_target=args.cn,
+            ccl_target=args.ccl,
     )
