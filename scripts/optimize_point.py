@@ -124,7 +124,7 @@ end
             "cn": cn_target,
             "ccl": ccl_target,
             "energy": float(energies[-1]),
-            "xyz": optimized_xyz,
+            "xyz": str(optimized_xyz),
     }
 
 
