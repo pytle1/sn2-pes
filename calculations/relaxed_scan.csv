@@ -1,0 +1,10 @@
+point,cn,ccl,energy,relative_energy,xyz
+0,1.42,3.0,-1127.935175141533,0.0,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn1.420_ccl3.000/job.xyz
+1,1.6,2.8,-1127.935724047339,-1.4411519850669854,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn1.600_ccl2.800/job.xyz
+2,1.8,2.6,-1127.915905141095,50.593378827178725,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn1.800_ccl2.600/job.xyz
+3,2.0,2.4,-1127.897331716661,99.35789762062058,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn2.000_ccl2.400/job.xyz
+4,2.2,2.2,-1127.890616118512,116.98969800878179,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn2.200_ccl2.200/job.xyz
+5,2.4,2.0,-1127.897733792107,98.30224869022332,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn2.400_ccl2.000/job.xyz
+6,2.6,1.9,-1127.903503092096,83.15495376151769,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn2.600_ccl1.900/job.xyz
+7,2.8,1.8,-1127.908406813559,70.2802349236898,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn2.800_ccl1.800/job.xyz
+8,3.0,1.74,-1127.911418562191,62.37289003441435,/home/ap/repos/sn2_pes/calculations/relaxed_point_cn3.000_ccl1.740/job.xyz
