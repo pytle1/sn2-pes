@@ -80,6 +80,8 @@ def main():
                     24, "Cl",
             )
 
+            bo_difference = bo_ccl - bo_cn
+
             q_o0 = hirshfeld_charge(text, 0, "O")
             q_o1 = hirshfeld_charge(text, 1, "O")
             q_n = hirshfeld_charge(text, 2, "N")
@@ -87,6 +89,7 @@ def main():
             q_cl = hirshfeld_charge(text, 24, "Cl")
 
             q_no2 = q_o0 + q_o1 + q_n
+            q_difference = q_no2 - q_cl
 
             rows.append(
                     {
@@ -96,10 +99,12 @@ def main():
                         "relative_energy": float(row["relative_energy"]),
                         "bo_cn": bo_cn,
                         "bo_ccl": bo_ccl,
+                        "bo_difference": bo_difference,
                         "q_cl": q_cl,
                         "q_cipso": q_cipso,
                         "q_n": q_n,
                         "q_no2": q_no2,
+                        "q_difference": q_difference,
                     }
             )
 
@@ -120,8 +125,10 @@ def main():
                 f"CCl={row['ccl']:.1f}  "
                 f"BO_CN={row['bo_cn']:.3f}  "
                 f"BO_CCl={row['bo_ccl']:.3f}  "
+                f"BO_diff={row['bo_difference']:+.3f}  "
                 f"qCl={row['q_cl']:+.3f}  "
-                f"qNO2={row['q_no2']:+.3f}"
+                f"qNO2={row['q_no2']:+.3f}  "
+                f"q_diff={row['q_difference']:+.3f}"
         )
 
 
