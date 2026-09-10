@@ -1,0 +1,17 @@
+! r2SCAN-3c Freq TightSCF
+
+%pal
+  nprocs 4
+end
+
+%output
+  Print[P_Hirshfeld] 1
+  Print[P_Mayer] 1
+end
+
+%plots
+  Format Gaussian_Cube
+  SpinDens("spin_density.cube");
+end
+
+* xyzfile 0 2 geometry.xyz
